@@ -69,6 +69,14 @@ export interface Translations {
   // Wallet
   walletConnected: string;
   walletAddress: string;
+  
+  // Search
+  searchReviews: string;
+  searchPlaceholder: string;
+  search: string;
+  searching: string;
+  clear: string;
+  alreadyReviewed: string;
 }
 
 export const translations: Record<Language, Translations> = {
@@ -132,6 +140,13 @@ export const translations: Record<Language, Translations> = {
     
     walletConnected: '已连接',
     walletAddress: '钱包地址',
+    
+    searchReviews: '搜索评论',
+    searchPlaceholder: '输入作品名称（支持模糊搜索）...',
+    search: '搜索',
+    searching: '搜索中...',
+    clear: '清除',
+    alreadyReviewed: '您已经评论过该作品了',
   },
   
   en: {
@@ -194,6 +209,13 @@ export const translations: Record<Language, Translations> = {
     
     walletConnected: 'Connected',
     walletAddress: 'Wallet Address',
+    
+    searchReviews: 'Search Reviews',
+    searchPlaceholder: 'Enter work name (supports fuzzy search)...',
+    search: 'Search',
+    searching: 'Searching...',
+    clear: 'Clear',
+    alreadyReviewed: 'You have already reviewed this work',
   },
   
   ja: {
@@ -256,6 +278,13 @@ export const translations: Record<Language, Translations> = {
     
     walletConnected: '接続済み',
     walletAddress: 'ウォレットアドレス',
+    
+    searchReviews: 'レビューを検索',
+    searchPlaceholder: '作品名を入力（あいまい検索対応）...',
+    search: '検索',
+    searching: '検索中...',
+    clear: 'クリア',
+    alreadyReviewed: 'この作品は既にレビュー済みです',
   },
   
   ko: {
@@ -318,6 +347,13 @@ export const translations: Record<Language, Translations> = {
     
     walletConnected: '연결됨',
     walletAddress: '지갑 주소',
+    
+    searchReviews: '리뷰 검색',
+    searchPlaceholder: '작품명 입력 (퍼지 검색 지원)...',
+    search: '검색',
+    searching: '검색 중...',
+    clear: '지우기',
+    alreadyReviewed: '이미 리뷰한 작품입니다',
   },
   
   es: {
@@ -380,6 +416,13 @@ export const translations: Record<Language, Translations> = {
     
     walletConnected: 'Conectado',
     walletAddress: 'Dirección de Cartera',
+    
+    searchReviews: 'Buscar Reseñas',
+    searchPlaceholder: 'Ingrese el nombre de la obra (búsqueda difusa)...',
+    search: 'Buscar',
+    searching: 'Buscando...',
+    clear: 'Limpiar',
+    alreadyReviewed: 'Ya has reseñado esta obra',
   },
   
   fr: {
@@ -442,6 +485,13 @@ export const translations: Record<Language, Translations> = {
     
     walletConnected: 'Connecté',
     walletAddress: 'Adresse du Portefeuille',
+    
+    searchReviews: 'Rechercher des Avis',
+    searchPlaceholder: 'Entrez le nom de l\'œuvre (recherche floue)...',
+    search: 'Rechercher',
+    searching: 'Recherche en cours...',
+    clear: 'Effacer',
+    alreadyReviewed: 'Vous avez déjà commenté cette œuvre',
   },
   
   de: {
@@ -504,6 +554,13 @@ export const translations: Record<Language, Translations> = {
     
     walletConnected: 'Verbunden',
     walletAddress: 'Wallet-Adresse',
+    
+    searchReviews: 'Bewertungen Suchen',
+    searchPlaceholder: 'Werktitel eingeben (Fuzzy-Suche unterstützt)...',
+    search: 'Suchen',
+    searching: 'Suche läuft...',
+    clear: 'Löschen',
+    alreadyReviewed: 'Sie haben dieses Werk bereits bewertet',
   },
 };
 

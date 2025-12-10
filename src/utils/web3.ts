@@ -1,9 +1,8 @@
 import { ethers } from 'ethers'
 
 // 智能合约地址（部署后替换为实际地址）
-// 设置为 null 表示合约未部署，将使用演示模式
 export const CONTRACT_ADDRESS: string | null =
-  '0x82f6428cd7Cc6dE864a6344265bd460745316E4E'
+  '0x8651F1a4Aa142f63Cd3e8519e2c9E0919f548a52'
 
 // 智能合约ABI
 export const CONTRACT_ABI = [
@@ -159,6 +158,125 @@ export const CONTRACT_ABI = [
     stateMutability: 'view',
     type: 'function',
   },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    name: 'hasReviewed',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: '_category',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: '_title',
+        type: 'string',
+      },
+    ],
+    name: 'getReviewsByCategoryAndTitle',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'id',
+            type: 'uint256',
+          },
+          {
+            internalType: 'string',
+            name: 'title',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'category',
+            type: 'string',
+          },
+          {
+            internalType: 'uint8',
+            name: 'rating',
+            type: 'uint8',
+          },
+          {
+            internalType: 'string',
+            name: 'content',
+            type: 'string',
+          },
+          {
+            internalType: 'address',
+            name: 'author',
+            type: 'address',
+          },
+          {
+            internalType: 'uint256',
+            name: 'timestamp',
+            type: 'uint256',
+          },
+        ],
+        internalType: 'struct ReviewContract.Review[]',
+        name: '',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_user',
+        type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: '_category',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: '_title',
+        type: 'string',
+      },
+    ],
+    name: 'checkIfReviewed',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
 ]
 
 export interface Web3Review {
@@ -171,200 +289,69 @@ export interface Web3Review {
   timestamp: bigint
 }
 
-// 钱包类型定义
-export interface WalletInfo {
-  id: string
-  name: string
-  icon: string
-  isInstalled: boolean
-  provider?: any
-}
-
-// 检测可用的钱包
-export function detectWallets(): WalletInfo[] {
-  const wallets: WalletInfo[] = []
-
-  // MetaMask
-  if (window.ethereum?.isMetaMask) {
-    wallets.push({
-      id: 'metamask',
-      name: 'MetaMask',
-      icon: '🦊',
-      isInstalled: true,
-      provider: window.ethereum,
-    })
-  }
-
-  // Coinbase Wallet
-  if (window.ethereum?.isCoinbaseWallet) {
-    wallets.push({
-      id: 'coinbase',
-      name: 'Coinbase Wallet',
-      icon: '🔵',
-      isInstalled: true,
-      provider: window.ethereum,
-    })
-  }
-
-  // 其他 EIP-1193 兼容钱包
-  if (
-    window.ethereum &&
-    !window.ethereum.isMetaMask &&
-    !window.ethereum.isCoinbaseWallet
-  ) {
-    wallets.push({
-      id: 'other',
-      name: '其他钱包',
-      icon: '💼',
-      isInstalled: true,
-      provider: window.ethereum,
-    })
-  }
-
-  // 未安装的钱包提示
-  if (!window.ethereum?.isMetaMask) {
-    wallets.push({
-      id: 'metamask-install',
-      name: 'MetaMask',
-      icon: '🦊',
-      isInstalled: false,
-    })
-  }
-
-  if (!window.ethereum?.isCoinbaseWallet && !window.ethereum) {
-    wallets.push({
-      id: 'coinbase-install',
-      name: 'Coinbase Wallet',
-      icon: '🔵',
-      isInstalled: false,
-    })
-  }
-
-  return wallets
-}
-
-// 连接指定钱包
-export async function connectWallet(
-  walletId?: string
-): Promise<{ address: string; provider: any } | null> {
-  let provider: any = null
-
-  // 如果没有指定钱包，使用默认的 window.ethereum
-  if (!walletId) {
-    if (typeof window.ethereum === 'undefined') {
-      alert('请先安装钱包扩展！')
-      return null
-    }
-    provider = window.ethereum
-  } else {
-    // 根据钱包 ID 选择 provider
-    if (walletId === 'metamask' || walletId === 'metamask-install') {
-      if (window.ethereum?.isMetaMask) {
-        provider = window.ethereum
-      } else {
-        window.open('https://metamask.io/download/', '_blank')
-        return null
-      }
-    } else if (walletId === 'coinbase' || walletId === 'coinbase-install') {
-      if (window.ethereum?.isCoinbaseWallet) {
-        provider = window.ethereum
-      } else {
-        window.open('https://www.coinbase.com/wallet', '_blank')
-        return null
-      }
-    } else if (walletId === 'other') {
-      provider = window.ethereum
-    } else {
-      provider = window.ethereum
-    }
-  }
-
-  if (!provider) {
-    alert('无法找到可用的钱包！')
-    return null
-  }
-
-  try {
-    const ethersProvider = new ethers.BrowserProvider(provider)
-    const accounts = await ethersProvider.send('eth_requestAccounts', [])
-    return {
-      address: accounts[0],
-      provider: provider,
-    }
-  } catch (error: any) {
-    if (error.code === 4001) {
-      alert('用户拒绝了连接请求')
-    } else {
-      console.error('连接钱包失败:', error)
-      alert('连接钱包失败，请重试')
-    }
-    return null
-  }
-}
-
-// 获取账户余额
-export async function getBalance(
-  address: string,
-  provider?: any
-): Promise<string> {
-  try {
-    let ethersProvider: ethers.Provider
-
-    if (provider) {
-      ethersProvider = new ethers.BrowserProvider(provider)
-    } else if (window.ethereum) {
-      ethersProvider = new ethers.BrowserProvider(window.ethereum)
-    } else {
-      return '0.00'
-    }
-
-    const balance = await ethersProvider.getBalance(address)
-    return ethers.formatEther(balance)
-  } catch (error) {
-    console.error('获取余额失败:', error)
-    return '0.00'
-  }
-}
-
-export async function getContract(provider?: any) {
-  if (!CONTRACT_ADDRESS) {
-    throw new Error('Contract not deployed')
-  }
-
-  let ethersProvider: ethers.BrowserProvider
-
-  if (provider) {
-    ethersProvider = new ethers.BrowserProvider(provider)
-  } else if (window.ethereum) {
-    ethersProvider = new ethers.BrowserProvider(window.ethereum)
-  } else {
-    throw new Error('Wallet not connected')
-  }
-
-  const signer = await ethersProvider.getSigner()
-  return new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer)
-}
-
-export async function postReviewToBlockchain(
-  title: string,
+// 检查用户是否已评论
+export async function checkIfUserReviewed(
   category: string,
-  rating: number,
-  content: string,
+  title: string,
+  userAddress: string,
   provider?: any
-): Promise<any> {
+): Promise<boolean> {
   try {
-    const contract = await getContract(provider)
-    const postFee = await contract.postFee()
+    if (!CONTRACT_ADDRESS) {
+      return false
+    }
 
-    const tx = await contract.postReview(title, category, rating, content, {
-      value: postFee,
-    })
+    if (typeof window.ethereum === 'undefined' && !provider) {
+      return false
+    }
 
-    await tx.wait()
-    return tx
+    // 使用只读的 provider 而不是 signer
+    const actualProvider = provider || window.ethereum
+    const ethersProvider = new ethers.BrowserProvider(actualProvider)
+    const contract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      CONTRACT_ABI,
+      ethersProvider
+    )
+
+    const hasReviewed = await contract.checkIfReviewed(
+      userAddress,
+      category,
+      title
+    )
+    return hasReviewed
   } catch (error) {
-    console.error('发布评论到区块链失败:', error)
-    throw error
+    console.error('检查评论状态失败:', error)
+    return false
+  }
+}
+
+// 根据分类和标题搜索评论（只读操作，不需要签名）
+export async function searchReviewsByCategoryAndTitle(
+  category: string,
+  title: string
+): Promise<Web3Review[]> {
+  try {
+    if (!CONTRACT_ADDRESS) {
+      return []
+    }
+
+    if (typeof window.ethereum === 'undefined') {
+      return []
+    }
+
+    // 搜索是只读操作，使用 provider 而不是 signer
+    const provider = new ethers.BrowserProvider(window.ethereum)
+    const contract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      CONTRACT_ABI,
+      provider
+    )
+    const reviews = await contract.getReviewsByCategoryAndTitle(category, title)
+    return reviews
+  } catch (error) {
+    console.error('搜索评论失败:', error)
+    return []
   }
 }
 
@@ -401,40 +388,6 @@ export async function getAllReviewsFromBlockchain(): Promise<Web3Review[]> {
     console.log('从区块链获取评论失败，这可能是因为合约未部署')
     return []
   }
-}
-
-export async function getPostFee(): Promise<string> {
-  try {
-    if (!CONTRACT_ADDRESS) {
-      return '0.001'
-    }
-
-    if (typeof window.ethereum === 'undefined') {
-      return '0.001'
-    }
-
-    const provider = new ethers.BrowserProvider(window.ethereum)
-    const contract = new ethers.Contract(
-      CONTRACT_ADDRESS,
-      CONTRACT_ABI,
-      provider
-    )
-
-    const code = await provider.getCode(CONTRACT_ADDRESS)
-    if (code === '0x') {
-      return '0.001'
-    }
-
-    const fee = await contract.postFee()
-    return ethers.formatEther(fee)
-  } catch (error) {
-    console.error('获取发布费用失败:', error)
-    return '0.001'
-  }
-}
-
-export function shortenAddress(address: string): string {
-  return `${address.slice(0, 6)}...${address.slice(-4)}`
 }
 
 // 声明全局window对象的ethereum属性

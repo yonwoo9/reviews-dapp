@@ -1,9 +1,7 @@
 
-# Dapp 评论网站设计
+  # Dapp 评论网站设计
 
 这是一个基于区块链的去中心化评论平台 DApp，用户可以评论电影、音乐、书籍、游戏等任何内容。
-
-原始设计: https://www.figma.com/design/6PFJEGrsACOSLUL7hefkSa/Dapp-%E8%AF%84%E8%AE%BA%E7%BD%91%E7%AB%99%E8%AE%BE%E8%AE%A1
 
 ## 🚀 快速开始
 
@@ -27,11 +25,27 @@ npm run dev
 reviews-dapp/
 ├── src/
 │   ├── components/      # React 组件
+│   │   ├── ui/          # 基础 UI 组件（Radix UI 封装）
+│   │   ├── Header.tsx   # 页面头部（钱包连接、语言切换）
+│   │   ├── SearchBar.tsx # 搜索栏组件
+│   │   ├── ReviewList.tsx # 评论列表
+│   │   ├── ReviewCard.tsx # 评论卡片
+│   │   ├── Leaderboard.tsx # 排行榜
+│   │   ├── AddReviewForm.tsx # 添加评论表单
+│   │   └── ...
 │   ├── contracts/       # Solidity 智能合约
-│   ├── contexts/        # React Context
-│   ├── utils/           # 工具函数（包括 Web3 集成）
+│   ├── contexts/        # React Context（语言设置等）
+│   ├── hooks/           # 自定义 React Hooks
+│   │   ├── usePostReview.ts # 发布评论 Hook
+│   │   └── useSearchReviews.ts # 搜索评论 Hook
+│   ├── config/          # 配置文件（Wagmi 配置等）
+│   ├── utils/           # 工具函数
+│   │   ├── web3.ts      # Web3 工具函数
+│   │   └── i18n.ts      # 国际化配置
 │   └── ...
 ├── scripts/             # 部署脚本
+│   ├── deploy.ts        # 合约部署脚本
+│   └── test-rpc.ts      # RPC 连接测试脚本
 ├── hardhat.config.ts    # Hardhat 配置
 └── package.json
 ```
@@ -80,22 +94,33 @@ reviews-dapp/
 
 ## 🎯 主要功能
 
-- 🔗 **钱包连接**: 支持 MetaMask 等 Web3 钱包
+- 🔗 **钱包连接**: 使用 RainbowKit 支持多种 Web3 钱包（MetaMask、Coinbase Wallet、WalletConnect 等）
+- 💰 **余额显示**: 实时显示钱包余额和网络信息
 - ⛓️ **区块链存储**: 所有评论永久存储在区块链上
 - 💎 **Gas费用**: 发布评论需支付少量 ETH (默认 0.001 ETH)
 - 🎨 **多分类支持**: 电影、音乐、书籍、游戏、其他
 - ⭐ **五星评分系统**: 为每个评论对象打分
 - 🎯 **分类筛选**: 快速找到感兴趣的评论
-- 🌐 **多语言支持**: 中英文切换
+- 🔍 **智能搜索**: 支持按分类和标题搜索评论，支持模糊匹配
+- 🚫 **防重复评论**: 同一用户不能对同一分类下的同一作品重复评论
+- 📊 **排行榜**: 综合评分排行榜，展示最受欢迎的评论
+- 🌐 **多语言支持**: 支持中文、英文、日文、韩文、西班牙文、法文、德文
+- 📄 **分页显示**: 评论列表支持分页浏览
 
 ## 🛠️ 技术栈
 
-- **前端**: React 18 + TypeScript + Vite
+- **前端框架**: React 18 + TypeScript + Vite
 - **样式**: Tailwind CSS
 - **UI 组件**: Radix UI + shadcn/ui
-- **Web3**: ethers.js
+- **Web3 集成**: 
+  - Wagmi (React Hooks for Ethereum)
+  - Viem (以太坊工具库)
+  - RainbowKit (钱包连接 UI)
+  - ethers.js (智能合约交互)
+- **状态管理**: React Hooks + TanStack Query
 - **智能合约**: Solidity 0.8.20
 - **部署工具**: Hardhat
+- **网络支持**: Ethereum、Polygon、BSC 等 EVM 兼容链
 
 ## 📝 可用脚本
 
@@ -115,6 +140,18 @@ reviews-dapp/
 2. **测试币**: 部署到测试网需要先获取测试币（从测试网水龙头）
 3. **私钥安全**: 永远不要将 `.env` 文件提交到 Git
 4. **合约审计**: 主网部署前建议进行安全审计
+5. **网络配置**: 确保钱包连接到正确的网络（Sepolia 测试网或主网）
+
+## ✨ 最新更新
+
+### v1.0.0
+- ✅ 集成 RainbowKit，支持多种钱包连接
+- ✅ 添加搜索功能，支持按分类和标题搜索评论
+- ✅ 实现防重复评论机制
+- ✅ 优化 UI 布局和响应式设计
+- ✅ 完善多语言支持（7 种语言）
+- ✅ 改进下拉框组件，优化用户体验
+- ✅ 代码优化，移除未使用的组件和函数
 
 ## 📚 相关文档
 

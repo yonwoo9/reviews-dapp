@@ -2,7 +2,6 @@ import React from 'react'
 import { MessageSquare, Plus } from 'lucide-react'
 import { WalletConnectRainbow } from './WalletConnectRainbow';
 import { LanguageSelector } from './LanguageSelector';
-import { CONTRACT_ADDRESS } from '../utils/web3';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface HeaderProps {
@@ -12,7 +11,6 @@ interface HeaderProps {
 }
 
 export function Header({ onAddClick, walletAddress, onWalletChange }: HeaderProps) {
-  const isDemoMode = !CONTRACT_ADDRESS;
   const { t } = useLanguage();
 
   return (
@@ -23,26 +21,24 @@ export function Header({ onAddClick, walletAddress, onWalletChange }: HeaderProp
             <MessageSquare className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-white">
-              {t.appTitle}
-              {isDemoMode && <span className="text-yellow-400 text-xs ml-2">{t.demoMode}</span>}
-            </h1>
+            <h1 className="text-white">{t.appTitle}</h1>
             <p className="text-sm text-gray-400">{t.appSubtitle}</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 flex-shrink-0">
           <LanguageSelector />
-          {!isDemoMode && <WalletConnectRainbow onWalletChange={onWalletChange} />}
+          <WalletConnectRainbow onWalletChange={onWalletChange} />
           
           <button
             onClick={onAddClick}
-            disabled={!isDemoMode && !walletAddress}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            title={!isDemoMode && !walletAddress ? t.connectWalletFirst : ''}
+            disabled={!walletAddress}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 h-10 rounded-lg flex items-center gap-1.5 hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap overflow-hidden flex-shrink-0"
+            style={{ minWidth: 'fit-content' }}
+            title={!walletAddress ? t.connectWalletFirst : ''}
           >
-            <Plus className="w-5 h-5" />
-            {t.addReview}
+            <Plus className="w-4 h-4 flex-shrink-0" />
+            <span className="text-xs whitespace-nowrap">{t.addReview}</span>
           </button>
         </div>
       </div>

@@ -1623,3 +1623,23 @@ html {
     opacity: .5;
   }
 }
+
+/* Fix for SelectItem checkmark position - ensure text doesn't overlap with checkmark */
+[data-slot="select-item"] {
+  position: relative;
+}
+
+/* Target the text content */
+[data-slot="select-item"] > span:not([class*="absolute"]) {
+  padding-right: 2.5rem !important;
+  flex: 1;
+  min-width: 0;
+  display: block;
+}
+
+/* Ensure checkmark is positioned correctly */
+[data-slot="select-item"] > span.absolute {
+  right: 0.75rem !important;
+  z-index: 10;
+  pointer-events: none;
+}
