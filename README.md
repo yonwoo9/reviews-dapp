@@ -111,9 +111,9 @@ reviews-dapp/
 
 ## 🛠️ 技术栈
 
-- **前端框架**: React 18 + TypeScript + Vite
+- **前端框架**: React 19 + TypeScript + Vite
 - **样式**: Tailwind CSS
-- **UI 组件**: Radix UI + shadcn/ui
+- **UI 组件**: Radix UI
 - **Web3 集成**: 
   - Wagmi (React Hooks for Ethereum)
   - Viem (以太坊工具库)
